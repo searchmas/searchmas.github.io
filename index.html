@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- 1. THE REDIRECT (0 seconds delay) -->
+  <meta http-equiv="refresh" content="0; url=https://searchenginesearchmas.github.io">
+  
+  <!-- 2. THE CANONICAL LINK (Tells Google the real home is the long URL) -->
+  <link rel="canonical" href="https://searchenginesearchmas.github.io">
+
+  <!-- 3. MANIFEST & FAVICON (Keeps it looking pro while it loads) -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <title>Searchmas Redirect</title>
+
+  <style>
+    body {
+      background-color: #ea4335; /* Your Santa Red */
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    .loading-box {
+      border: 4px solid #fff;
+      padding: 20px;
+      background: rgba(0,0,0,0.2);
+    }
+    a { color: #fbbc05; text-decoration: none; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <div class="loading-box">
+    <h1>Searchmas Network</h1>
+    <p>Rerouting the sleigh to the Mankind Fortress...</p>
+    <!-- Fallback for old IE or slow connections -->
+    <p>If you are not moved in 2 seconds, <br>
+       <a href="https://searchenginesearchmas.github.io">CLICK HERE TO ENTER</a></p>
+  </div>
+
+  <script>
+    // Backup JavaScript redirect in case Meta Refresh is disabled
+    window.location.replace("https://searchenginesearchmas.github.io");
+  </script>
+
+</body>
+</html>
