@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"> <link rel="icon" type="image/png" href="searchenginesearchmas.github.io/Searchmas/favicon.png">
+<title>Searchmas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<style>
+html,body {
+  margin:0;
+  padding:0;
+  height:100%;
+  font-family:Arial,sans-serif;
+  background:#ff0000; /* flat red background */
+}
+
+#home {
+  min-height:100vh;
+  text-align:center;
+  padding-top:100px;
+}
+
+.logo {
+  font-size:48px;
+  font-weight:bold;
+  line-height:1.2;
+}
+
+.logo span:nth-child(1){color:#4285f4}
+.logo span:nth-child(2){color:#ff9800}
+.logo span:nth-child(3){color:#fbbc05}
+.logo span:nth-child(4){color:#4285f4}
+.logo span:nth-child(5){color:#34a853}
+.logo span:nth-child(6){color:#ff9800}
+.logo span:nth-child(7){color:#fbbc05}
+.logo span:nth-child(8){color:#4285f4}
+.logo span:nth-child(9){color:#34a853}
+
+.search-box {
+  max-width:580px;
+  width:90%;
+  margin:auto;
+}
+input {
+  width:100%;
+  padding:10px;
+  font-size:16px;
+  border:1px solid #dfe1e5;
+}
+
+#results {
+  display:none;
+  max-width:800px;
+  margin:auto;
+  padding:15px;
+}
+.back {
+  cursor:pointer;
+  font-size:22px;
+  margin-bottom:8px;
+}
+
+.tabs {
+  margin:15px 0;
+  border-bottom:1px solid #ddd;
+}
+.tab {
+  cursor:pointer;
+  color:#5f6368;
+  padding:8px;
+  display:inline-block;
+}
+.tab.active {
+  color:#1a73e8;
+  border-bottom:3px solid #1a73e8;
+}
+
+.card {
+  background:#fff;
+  border:1px solid #ccc;
+  padding:10px;
+  margin:10px 0;
+  text-decoration:none;
+  color:#000;
+  display:block;
+}
+</style>
+</head>
+
+<body>
+
+<div id="home">
+  <div class="logo">
+    <span>S</span><span>e</span><span>a</span><span>r</span><span>c</span><span>h</span><span>m</span><span>a</span><span>s</span>
+  </div>
+  <form class="search-box" onsubmit="startSearch(event)">
+    <input id="qHome" placeholder="Search the web">
+  </form>
+</div>
+
+<div id="results">
+  <div class="back" onclick="goHome()">⬅ Back</div>
+  <input id="qTop">
+
+  <div class="tabs">
+    <div class="tab active" data-tab="all">All</div>
+    <div class="tab" data-tab="images">Images</div>
+    <div class="tab" data-tab="news">News</div>
+  </div>
+
+  <div id="content"></div>
+</div>
+
+<script>
+// same simplified JS as before
+var tab="all";
+var homeEl=document.getElementById("home");
+var resEl=document.getElementById("results");
+var qHome=document.getElementById("qHome");
+var qTop=document.getElementById("qTop");
+var content=document.getElementById("content");
+
+function startSearch(e){
+  e.preventDefault();
+  var q=qHome.value;
+  if(!q) return;
+  showResults(q);
+}
+
+qTop.onkeydown=function(e){
+  if(e.keyCode===13){
+    e.preventDefault();
+    var q=qTop.value;
+    if(!q) return;
+    search();
+  }
+};
+
+var tabs=document.querySelectorAll(".tab");
+for(var i=0;i<tabs.length;i++){
+  tabs[i].onclick=function(){
+    tab=this.getAttribute("data-tab");
+    for(var j=0;j<tabs.length;j++){tabs[j].classList.remove("active");}
+    this.classList.add("active");
+    search();
+  };
+}
+
+function showResults(q){
+  homeEl.style.display="none";
+  resEl.style.display="block";
+  qTop.value=q;
+  search();
+}
+
+function goHome(){
+  resEl.style.display="none";
+  homeEl.style.display="block";
+}
+
+function card(text,url){
+  return '<a class="card" href="'+url+'" target="_blank">'+text+'</a>';
+}
+
+function search(){
+  var q=qTop.value;
+  if(!q) return;
+  var enc=encodeURIComponent(q);
+  content.innerHTML="Loading...";
+
+  if(tab==="all"){
+    var xhr=new XMLHttpRequest();
+    xhr.open("GET","https://api.allorigins.win/get?url="+encodeURIComponent("https://duckduckgo.com/html/?q="+enc));
+    xhr.onload=function(){
+      try{
+        var d=JSON.parse(xhr.responseText);
+        var doc=new DOMParser().parseFromString(d.contents,"text/html");
+        var results=doc.querySelectorAll(".result__body");
+        if(!results.length){content.innerHTML="No results found.";return;}
+        var html="";
+        for(var i=0;i<Math.min(10,results.length);i++){
+          var a=results[i].querySelector(".result__a");
+          var s=results[i].querySelector(".result__snippet");
+          html+=card("<strong>"+a.textContent+"</strong><br>"+(s?s.textContent:""),a.href);
+        }
+        content.innerHTML=html;
+      }catch(e){content.innerHTML="Error loading results.";}
+    };
+    xhr.send();
+  }
+
+  if(tab==="images"){
+    content.innerHTML=card("Search Bing Images for '"+q+"'","https://www.bing.com/images/search?q="+enc);
+  }
+
+  if(tab==="news"){
+    content.innerHTML=
+      card("Google News","https://news.google.com/search?q="+enc)+
+      card("Bing News","https://www.bing.com/news/search?q="+enc);
+  }
+}
+</script>
+
+</body>
+</html>
