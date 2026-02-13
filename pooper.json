@@ -1,0 +1,18 @@
+{
+  "name": "Searchmas",
+  "short_name": "Searchmas",
+  "description": "Fast, clean web search with a browser-like experience.",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
